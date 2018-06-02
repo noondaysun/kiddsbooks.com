@@ -1,0 +1,10 @@
+version: "2.3"
+
+services:
+
+### NGINX Server Container ##################################
+
+  nginx:
+    image: nginx
+    ports:
+      - "80:80" 
