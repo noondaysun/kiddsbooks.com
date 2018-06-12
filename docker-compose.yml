@@ -2,9 +2,33 @@ version: "2.3"
 
 services:
 
+### PHP-FPM Container #######################################
+
+  php-fpm:
+    container_name: php-fpm
+    hostname: php-fpm
+    image: php
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./:/var/www/html
+
 ### NGINX Server Container ##################################
 
   nginx:
+    healthcheck:
+      test:
+        wget http://kiddsbooks.com/status
     image: nginx
+    links:
+      - php-fpm
+      - redis
     ports:
-      - "80:80" 
+      - "80:80"
+    volumes:
+      - ./docker-config/nginx/conf.d/:/etc/nginx/conf.d/
+
+### REDIS Container #########################################
+
+  redis:
+    image: redis
