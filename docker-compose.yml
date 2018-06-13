@@ -1,0 +1,51 @@
+version: "2.3"
+
+services:
+
+### PHP-FPM Container #######################################
+
+  php-fpm:
+    container_name: php-fpm
+    hostname: php-fpm
+    image: mikechernev/php7-fpm-laravel:latest
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./:/var/www/html
+
+### NGINX Server Container ##################################
+
+  nginx:
+    depends_on:
+      - php-fpm
+      - mysql
+    extra_hosts:
+      - kiddsbooks.com:127.0.0.1
+    healthcheck:
+      test:
+        wget http://kiddsbooks.com/status
+    image: nginx:mainline-alpine
+    links:
+      - php-fpm
+      - redis
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker-config/nginx/conf.d/:/etc/nginx/conf.d/
+      
+### MySQL Container #########################################
+
+  mysql:
+    image: mysql:latest
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=115kke9Hua
+      - MYSQL_DATABASE=homestead
+      - MYSQL_USER=homestead
+      - MYSQL_PASSWORD=secret
+
+### REDIS Container #########################################
+
+  redis:
+    image: redis
