@@ -23,7 +23,11 @@ services:
       - kiddsbooks.com:127.0.0.1
     healthcheck:
       test:
-        wget http://kiddsbooks.com/status
+        ["CMD", "wget", "-O", "-", "http://kiddsbooks.com/status"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     image: nginx:mainline-alpine
     links:
       - php-fpm
@@ -32,20 +36,34 @@ services:
       - "80:80"
     volumes:
       - ./docker-config/nginx/conf.d/:/etc/nginx/conf.d/
-      
+
 ### MySQL Container #########################################
 
   mysql:
+    environment:
+      - MYSQL_ROOT_PASSWORD=JVTYHR^yfrhd2w7
+      - MYSQL_DATABASE=homestead
+      - MYSQL_USER=homestead
+      - MYSQL_PASSWORD=JFJWRTP%375ahjwsg
+    healthcheck:
+      test:
+        ["CMD", "mysql", "-h", "localhost", "-u", "root", "-p", "115kke9Hua", "-e", "SHOW DATABASES"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     image: mysql:latest
     volumes:
       - ./data:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=115kke9Hua
-      - MYSQL_DATABASE=homestead
-      - MYSQL_USER=homestead
-      - MYSQL_PASSWORD=secret
 
 ### REDIS Container #########################################
 
   redis:
-    image: redis
+    image: redis:alpine
+    healthcheck:
+      test:
+        ["CMD", "redis-cli", "-h", "127.0.0.1", "info"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
