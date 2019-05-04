@@ -10,6 +10,7 @@ services:
     image: mikechernev/php7-fpm-laravel:latest
     ports:
       - "9000:9000"
+    restart: on-failure:5
     volumes:
       - ./:/var/www/html
 
@@ -34,6 +35,7 @@ services:
       - redis
     ports:
       - "80:80"
+    restart: on-failure:5
     volumes:
       - ./docker-config/nginx/conf.d/:/etc/nginx/conf.d/
 
@@ -47,12 +49,13 @@ services:
       - MYSQL_PASSWORD=JFJWRTP%375ahjwsg
     healthcheck:
       test:
-        ["CMD", "mysql", "-h", "localhost", "-u", "root", "-p", "115kke9Hua", "-e", "SHOW DATABASES"]
+        ["CMD", "/etc/init.d/mysql", "status"]
       interval: 1m30s
       timeout: 10s
       retries: 3
       start_period: 40s
     image: mysql:latest
+    restart: on-failure:5
     volumes:
       - ./data:/var/lib/mysql
 
@@ -67,3 +70,4 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    restart: on-failure:5
