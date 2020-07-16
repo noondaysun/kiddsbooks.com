@@ -1,0 +1,51 @@
+{
+    "listeners": {
+        "*:80": {
+            "pass": "routes/symfony"
+        }
+    },
+    "routes": {
+        "symfony": [
+            {
+                "match": {
+                    "uri": [
+                        "*.php",
+                        "*.php/*"
+                    ]
+                },
+                "action": {
+                    "pass": "applications/symfony/direct"
+                }
+            },
+            {
+                "action": {
+                    "share": "/var/www/kiddsbooks.com/public/",
+                    "fallback": {
+                        "pass": "applications/symfony/index"
+                    }
+                }
+            }
+        ]
+    },
+    "applications": {
+        "symfony": {
+            "type": "php",
+            "processes": {
+                "max": 10,
+                "spare": 5,
+                "idle_timeout": 20
+            },
+            "user": "www-data",
+            "targets": {
+                "direct": {
+                    "root": "/var/www/kiddsbooks.com/public/"
+                },
+
+                "index": {
+                    "root": "/var/www/kiddsbooks.com/public/",
+                    "script": "index.php"
+                }
+            }
+        }
+    }
+}
