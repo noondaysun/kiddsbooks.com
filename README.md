@@ -1,13 +1,15 @@
-# [kiddsbooks.com] (https://www.kiddsbooks.com) SITE CODE
+# [kiddsbooks.com](https://www.kiddsbooks.com)
 
 ### LOCAL DEVELOPMENT
+
+**Generate a local self-signed cert, or install a verified certificate with intermediates.**
+
+**See nginx unit documentation: [Nginx Unit SSL/TLS Configuration](https://unit.nginx.org/configuration/#ssl-tls-and-certificates)**
+
+**See easyRSA CA setup documentation: [EasyRSA CA setup](https://www.digitalocean.com/community/tutorials/how-to-set-up-and-configure-a-certificate-authority-ca-on-ubuntu-20-04)**
+
 ```shell
 cp .env.example .env
-
-# Generate a local self-signed cert, or install a verified certificate with intermediates.
-# See nginx unit documentation: [Nginx Unit SSL/TLS Configuration] (https://unit.nginx.org/configuration/#ssl-tls-and-certificates)
-# See easyRSA CA setup documentation: [EasyRSA CA setup](https://www.digitalocean.com/community/tutorials/how-to-set-up-and-configure-a-certificate-authority-ca-on-ubuntu-20-04)
-
 cd unit-config
 
 
