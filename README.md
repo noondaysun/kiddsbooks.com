@@ -1,11 +1,10 @@
 # [kiddsbooks.com](https://www.kiddsbooks.com)
 
-![workflows](https://github.com/noondaysun/kiddsbooks.com/workflows/.github/workflows/CI%20Workflow/badge.svg)
-
+![workflows](https://github.com/noondaysun/kiddsbooks.com/workflows/CI%20Workflow/badge.svg)
 
 Site code for [kiddsbooks.com](https://www.kiddsbooks.com)
 
-### LOCAL DEVELOPMENT
+## LOCAL DEVELOPMENT
 
 ```shell
 cp .env.example .env
