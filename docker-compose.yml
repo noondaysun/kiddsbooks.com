@@ -1,37 +1,67 @@
-version: "3.4"
+version: "3.6"
 services:
-  unit:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - front_tier
+    restart: always
+  dnsmasq:
+    image: andyshinn/dnsmasq:2.83
+    container_name: dnsmasq
+    command:
+      - '--address=/api.noondaysun.org/127.0.0.1/'
+      - '--server=8.8.8.8'
+    ports:
+      - "53:53"
+      - "53:53/udp"
+    networks:
+      - front_tier
+    cap_add:
+      - NET_ADMIN
+    restart: always
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    networks:
+      - front_tier
+    restart: on-failure
+    volumes:
+      - ./app:/var/www
+      - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+    environment:
+      VIRTUAL_HOST: local.kiddsbooks.com
+  php:
+    container_name: php
     build:
       context: .
-      dockerfile: ./Dockerfile
-      cache_from:
-        - nginx/unit:1.18.0-php7.3
-    container_name: 'kiddsbooks'
-    ports:
-      - 80:80
-      - 443:443
-    networks:
-      - front-tier
-      - back-tier
-  mysql:
-    image: mysql:latest
-    container_name: mysql
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    env_file: .env
-    environment:
-      MYSQL_DATABASE: 'kiddsbooks'
-      MYSQL_USER: 'user'
-    healthcheck:
-      test: ["CMD", "mysqlshow"]
-      interval: 2m30s
-      timeout: 15s
-      retries: 3
     expose:
-      - 3600
+      - 9000
     networks:
-      - back-tier
+      - front_tier
+      - back_tier
+    restart: on-failure
+    volumes:
+      - ./app:/var/www
+    working_dir: /var/www
+  redis:
+    container_name: redis
+    image: redis:6-alpine
+    networks:
+      - front_tier
+    restart: always
+  postgres:
+    container_name: postgres
+    image: postgres:alpine
+    env_file:
+      - .env
+    networks:
+      - back_tier
 
 networks:
-  front-tier:
-  back-tier:
+  back_tier:
+  front_tier:

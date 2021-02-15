@@ -1,36 +1,21 @@
 # [kiddsbooks.com](https://www.kiddsbooks.com)
 
+![workflows](https://github.com/noondaysun/kiddsbooks.com/workflows/.github/workflows/CI%20Workflow/badge.svg)
+
+
+Site code for [kiddsbooks.com](https://www.kiddsbooks.com)
+
 ### LOCAL DEVELOPMENT
-
-**Generate a local self-signed cert, or install a verified certificate with intermediates.**
-
-**See nginx unit documentation: [Nginx Unit SSL/TLS Configuration](https://unit.nginx.org/configuration/#ssl-tls-and-certificates)**
-
-**See easyRSA CA setup documentation: [EasyRSA CA setup](https://www.digitalocean.com/community/tutorials/how-to-set-up-and-configure-a-certificate-authority-ca-on-ubuntu-20-04)**
 
 ```shell
 cp .env.example .env
-cd unit-config
-
-
-openssl genrsa -out local.kiddsbooks.com.key
-openssl req -new -key local.kiddsbooks.com.key -out local.kiddsbooks.com.req
-
-# Copy key to your CA server using scp/rsync
-# rsync local.kiddsbooks.com.req user@server:/tmp
-# scp local.kiddsbooks.com.req user@server:/tmp
-# On CA
-
-easyrsa import-req /tmp/local.kiddsbooks.com.req kiddsbooks
-easyrsa sign-req server kiddsbooks
-
-# Copy back to local
-# scp user@server:/path/to/easyrsa/pki/issued/kiddsbooks.com .
-
-openssl x509 -in kiddsbooks.crt -out kiddsbooks.pem
-
-cd ../
 
 docker-compose up --build -d
 
+# If port 53 is already in use - $(netstat -tulpn | grep 53)
+echo '127.0.0.1 local.kiddsbooks.com local' >> /etc/hosts
+
+open http://local.kiddsbooks.com
+
+docker-compose exec php composer ci # to run test suite
 ```
