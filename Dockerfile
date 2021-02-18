@@ -7,6 +7,7 @@ SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 RUN apk update && \
     apk add --no-cache autoconf=2.69-r3 \
     freetype-dev=2.10.4-r1 \
+    git=2.30.1-r0 \
     g++=10.2.1_pre1-r3 \
     gcc=10.2.1_pre1-r3 \
     jpeg-dev=9d-r1 \
