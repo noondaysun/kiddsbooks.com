@@ -57,8 +57,6 @@ services:
   postgres:
     container_name: postgres
     image: postgres:alpine
-    env_file:
-      - .env
     networks:
       - back_tier
 
