@@ -16,19 +16,22 @@ jobs:
         uses: actions/checkout@v2
       # Docker
       - name: DockerCompose Lint
-        run: docker-compose config -q
+        run: |
+          cp app/kiddsbooks.com/.env.test app/kiddsbooks.com/.env && \
+          docker-compose config -q
       - name: hadolint
         uses: brpaz/hadolint-action@master
       # PHP
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "7.4"
+          php-version: "8.0"
           coverage: none
           tools: composer
       - name: Install PHP dependencies and CI
         run: |
-          cd php-app && \
+          cd app/kiddsbooks.com && \
+          cp .env.test .env && \
           composer install --prefer-dist --no-progress --no-ansi --no-interaction && \
           echo "vendor/bin" >> $GITHUB_PATH && \
           composer ci
