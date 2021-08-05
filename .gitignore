@@ -1,9 +1,6 @@
-vendor/
-node_modules/
-npm-debug.log
-/data
-
-*.code-workspace
-.project
-.build
-.settings
+/vendor
+/.idea
+Homestead.json
+Homestead.yaml
+.env
+.phpunit.result.cache
